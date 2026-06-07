@@ -4,7 +4,10 @@ st.set_page_config(page_title="Question and Answering app")
 
 @st.cache_resource
 def load_model():
-    return pipeline("question-answering", "timpal0l/mdeberta-v3-base-squad2")
+    return pipeline(
+        "question-answering",
+        model="timpal0l/mdeberta-v3-base-squad2"
+    )
 
 qa_model = load_model()
 
