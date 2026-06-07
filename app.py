@@ -1,11 +1,18 @@
 import streamlit as st
-from transformers import pipeline
+import torch
+from transformers import pipeline, AutoTokenizer, AutoModelForQuestionAnswering
+
 st.set_page_config(page_title="Question and Answering app")
+
+
+model_name = "timpal0l/mdeberta-v3-base-squad2"
+tokenizer = AutoTokenizer.from_pretrained(model_name)
+
 
 @st.cache_resource
 def load_model():
 
-    return pipeline("question-answering", model='distilbert-base-cased-distilled-squad')
+    return AutoModelForQuestionAnswering.from_pretrained(model_name)
 
 
 qa_model = load_model()
@@ -26,11 +33,32 @@ with col1:
 with col2:
     st.markdown("    A Large Language Model–based QA bot that enables users to interact with AI through a simple and user-friendly interface.")
 
+
+inputs = tokenizer(question, context, return_tensors="pt")
+with torch.no_grad():
+    outputs = qa_model(**inputs)
+
+
+start = outputs.start_logits.argmax()
+end = outputs.end_logits.argmax() + 1
+answer = tokenizer.convert_tokens_to_string(
+    tokenizer.convert_ids_to_tokens(inputs["input_ids"][0][start:end])
+)
+
+
 if context and question and submit_btn:
     with st.spinner('Answering your question...'):
-        result = qa_model(question=question, context=context)
+
+        outputs = qa_model(**inputs)
+
+        result = tokenizer.convert_tokens_to_string(
+            tokenizer.convert_ids_to_tokens(inputs["input_ids"][0][start:end])
+        )
         st.success(result['answer'])
-        st.metric(result['scores'])
+        st.metric(label="Confidence Score", value=f"{round(result['score'] * 100, 2)}%")
 else:
     st.markdown("Invalid Input...")
+
+import warnings
+warnings.filterwarnings('ignore')
 
