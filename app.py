@@ -46,19 +46,15 @@ answer = tokenizer.convert_tokens_to_string(
 )
 
 
-if context and question and submit_btn:
-    with st.spinner('Answering your question...'):
-
-        outputs = qa_model(**inputs)
-
-        result = tokenizer.convert_tokens_to_string(
-            tokenizer.convert_ids_to_tokens(inputs["input_ids"][0][start:end])
-        )
-        st.success(result['answer'])
-        st.metric(label="Confidence Score", value=f"{round(result['score'] * 100, 2)}%")
-else:
-    st.markdown("Invalid Input...")
-
+if submit_btn:
+    if not context.strip() or not question.strip():
+        st.warning("⚠️ Please enter both context and question.")
+    else:
+        with st.spinner('Answering your question...'):
+            result = qa_model(question=question, context=context)
+            st.success(result['answer'])
+            st.metric(label="Confidence", value=f"{round(result['score'] * 100, 2)}%")
+# No else here — show nothing on initial load
 import warnings
 warnings.filterwarnings('ignore')
 
