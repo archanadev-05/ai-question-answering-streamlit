@@ -1,3 +1,6 @@
-streamlit
-transformers==4.38.2
-torch
+streamlit==1.35.0
+transformers==4.41.2
+torch==2.3.1
+tokenizers==0.19.1
+huggingface-hub==0.23.4
+sentencepiece
