@@ -11,7 +11,8 @@ This project allows users to input a context and ask questions to get intelligen
 - ❓ Ask questions based on the context
 - 🤖 AI-powered answers using a transformer model
 - ⚡ Fast inference with cached model loading
-- 🎯 Simple and interactive Streamlit UI
+- 🎯 Confidence score displayed with every answer
+- 🎨 Clean dark-themed Streamlit UI
 
 ---
 
@@ -20,14 +21,93 @@ This project allows users to input a context and ask questions to get intelligen
 - Python 🐍
 - Streamlit 🎈
 - Hugging Face Transformers 🤗
+- PyTorch 🔥
 - Pretrained Model: `timpal0l/mdeberta-v3-base-squad2`
 
 ---
 
 ## 📦 Installation
 
-Clone the repository:
+### 1. Clone the repository
 
 ```bash
-git clone https://github.com/your-username/ai-question-answering-streamlit.git
+git clone https://github.com/archanadev-05/ai-question-answering-streamlit.git
 cd ai-question-answering-streamlit
+```
+
+---
+
+### 2. Create a virtual environment
+
+```bash
+# Create the environment
+python -m venv .venv
+
+# Activate it — Mac/Linux
+source .venv/bin/activate
+
+# Activate it — Windows
+.venv\Scripts\activate
+```
+
+---
+
+### 3. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+### 4. Run the app
+
+```bash
+streamlit run app.py
+```
+
+Then open your browser at **http://localhost:8501**
+
+---
+
+## 📄 requirements.txt
+
+```
+streamlit
+transformers
+torch
+sentencepiece
+protobuf
+```
+
+---
+
+## 📁 Project Structure
+
+```
+ai-question-answering-streamlit/
+│
+├── app.py               # Main Streamlit application
+├── requirements.txt     # Python dependencies
+└── README.md            # Project documentation
+```
+
+---
+
+## 💡 How It Works
+
+1. Paste any paragraph or document as **context**
+2. Type a **question** whose answer exists in the context
+3. Click **Get Answer**
+4. The model reads both inputs, locates the answer span, and returns it with a confidence score
+
+The app uses `AutoTokenizer` and `AutoModelForQuestionAnswering` from Hugging Face instead of the deprecated `pipeline("question-answering")`, making it compatible with the latest versions of the `transformers` library.
+
+---
+
+
+## 🙌 Acknowledgements
+
+- [Hugging Face](https://huggingface.co/) for the model and transformers library
+- [Streamlit](https://streamlit.io/) for the web framework
+- Model: [timpal0l/mdeberta-v3-base-squad2](https://huggingface.co/timpal0l/mdeberta-v3-base-squad2)
