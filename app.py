@@ -47,14 +47,16 @@ if submit_btn:
         with st.spinner('Answering your question...'):
             start = outputs.start_logits.argmax().item()
             end   = outputs.end_logits.argmax().item() + 1
-            result = qa_model(question=question, context=context)
+
             answer = tokenizer.convert_tokens_to_string(
                 tokenizer.convert_ids_to_tokens(inputs["input_ids"][0][start:end])
             )
 
+
+
             st.success(answer)
             st.write(answer)   # shows the raw output — check if it's a dict or string
-            st.metric(label="Confidence", value=f"{round(result['score'] * 100, 2)}%")
+            # st.metric(label="Confidence", value=f"{round(result['score'] * 100, 2)}%")
 # No else here — show nothing on initial load
 import warnings
 warnings.filterwarnings('ignore')
